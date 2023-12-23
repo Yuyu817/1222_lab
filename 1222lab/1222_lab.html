@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dice Rolling Statistics</title>
+</head>
+<body>
+    <form action="#">
+        <input id="rollButton" type="button" value="Roll 12 Dice">
+    </form>
+    <div id="diceImages">
+        <img id="die1" src="die1.png" alt="blank image">
+        <img id="die2" src="die2.png" alt="blank image">
+        <img id="die3" src="die3.png" alt="blank image">
+        <img id="die4" src="die4.png" alt="blank image">
+        <img id="die5" src="die5.png" alt="blank image">
+        <img id="die6" src="die6.png" alt="blank image">
+    </div>
+
+    <table id="resultsTable" border="1">
+        <thead>
+            <tr>
+                <th>Face</th>
+                <th>Occurrences</th>
+                <th>Percentage</th>
+            </tr>
+        </thead>
+        <tbody id="resultsBody"></tbody>
+    </table>
+
+    <script>
+        function start() {
+            var button = document.getElementById("rollButton");
+            button.addEventListener("click", rollDice);
+        }
+
+        function setImage(dieImg, dieValue) {
+            dieImg.setAttribute("src", "die" + dieValue + ".png");
+            dieImg.setAttribute("alt", "die image with " + dieValue + " spot(s)");
+        }
+
+         function rollDice() {
+            var counts = [0, 0, 0, 0, 0, 0]; // Initialize counts for each face
+            var totalRolls = 12;
+
+            var resultsBody = document.getElementById('resultsBody');
+            resultsBody.innerHTML = '';
+
+            for (var i = 0; i < totalRolls; i++) {
+                var dieValue = Math.floor(1 + Math.random() * 6);
+                counts[dieValue - 1]++; // Increment the count for the face (subtract 1 as arrays are 0-indexed)
+                setImage(document.getElementById('die' + (i + 1)), dieValue); // Set image for each dice
+            }
+
+            // Calculate probabilities and display in a table
+            for (var j = 0; j < counts.length; j++) {
+                var percentage = ((counts[j] / totalRolls) * 100).toFixed(2) + '%';
+
+                var row = document.createElement('tr');
+                row.innerHTML = '<td>' + (j + 1) + '</td>' +
+                    '<td>' + counts[j] + '</td>' +
+                    '<td>' + percentage + '</td>';
+
+                resultsBody.appendChild(row);
+            }
+        }
+
+        window.addEventListener("load", start);
+    </script>
+</body>
+</html>
+
